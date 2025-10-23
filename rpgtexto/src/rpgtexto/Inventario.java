@@ -25,11 +25,11 @@ public class Inventario {
 
             System.out.println("Item " + itemNoInventario.getNome() + " atualizado no inventário.\nAgora voce possui: " + novaQuantidade);
 
+        } else{
+            this.itens.put(itemParaAdicionar.getNome(), itemParaAdicionar);
+
+            System.out.println("Voce achou um novo item!!! " + itemParaAdicionar.getNome() + ".\nItem adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
         }
-
-        this.itens.put(itemParaAdicionar.getNome(), itemParaAdicionar);
-
-        System.out.println("Voce achou um novo item!!!\n" + itemParaAdicionar.getNome() + " adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
 
     }
 }
