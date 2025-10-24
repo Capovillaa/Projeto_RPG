@@ -9,7 +9,7 @@ public class Item {
     private int quantidade;
 
 
-    public Item (String nome,String descricao,String efeito,byte quantidade)
+    public Item (String nome,String descricao,String efeito,int quantidade)
     {
         this.nome = nome;
         this.descricao = descricao;
@@ -18,7 +18,7 @@ public class Item {
 
     }
 
-    public void setQuantidade (byte quantidade)
+    public void setQuantidade (int quantidade)
     {
         this.quantidade = quantidade;
     }
@@ -38,10 +38,12 @@ public class Item {
         return this.efeito;
     }
 
-    public byte getQuantidade ()
+    public int getQuantidade ()
     {
         return this.quantidade;
     }
+
+
 
     @Override
     public String toString ()

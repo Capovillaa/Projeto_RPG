@@ -1,5 +1,6 @@
 package rpgtexto;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class Inventario {
             int quantidadeParaAdicionar = itemParaAdicionar.getQuantidade();
 
             int novaQuantidade = quantidadeAtual + quantidadeParaAdicionar;
-
+            itemNoInventario.setQuantidade(novaQuantidade);
             System.out.println("Item " + itemNoInventario.getNome() + " atualizado no inventário.\nAgora voce possui: " + novaQuantidade);
 
         } else{
@@ -31,6 +32,14 @@ public class Inventario {
             System.out.println("Voce achou um novo item!!! " + itemParaAdicionar.getNome() + ".\nItem adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
         }
 
+    }
+
+    public Collection<Item> getTodosOsItens() {
+        return this.itens.values();
+    }
+
+    public void esvaziar() {
+        this.itens.clear();
     }
 
     @Override
