@@ -44,6 +44,15 @@ public class Item {
     }
 
     @Override
+    public String toString ()
+    {
+        return "Nome: " + this.nome +
+                " | Descricao: " + this.descricao +
+                " | Efeito: " + this.efeito +
+                " | Quantidade: " + this.quantidade;
+    }
+
+    @Override
     public boolean equals (Object obj)
     {
         if (this == obj) return true;

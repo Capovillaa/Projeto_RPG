@@ -32,4 +32,24 @@ public class Inventario {
         }
 
     }
+
+    @Override
+    public String toString ()
+    {
+        if (this.itens.isEmpty()) {
+            return "Inventario vazio.";
+        }
+
+        String resultado = "--- INVENTARIO ---\n";
+
+
+        // Aqui estava com dificuldade na logica, pesquisei e achei esse "for-each" que é um for com ":"
+        // ele basicamente declara uma variavel item do tipo Item temporaria e pega todos os valores dos itens
+        // armazenados no inventario
+        for (Item item : this.itens.values()) {
+            resultado = resultado + item.toString() + "\n";
+        }
+
+        return resultado;
+    }
 }
