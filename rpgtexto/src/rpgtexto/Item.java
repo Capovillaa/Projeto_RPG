@@ -6,7 +6,7 @@ public class Item {
     private String nome;
     private String descricao;
     private String efeito;
-    private byte quantidade;
+    private int quantidade;
 
 
     public Item (String nome,String descricao,String efeito,byte quantidade)
