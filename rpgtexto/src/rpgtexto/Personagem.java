@@ -2,7 +2,7 @@ package rpgtexto;
 
 import java.util.Collection;
 
-public class Personagem {
+public abstract class Personagem implements Cloneable {
     private String nome;
     private int pontosVida;
     private int ataque;
@@ -24,6 +24,20 @@ public class Personagem {
         this.inventario = new Inventario();
         this.experienciaParaProximoNivel = 100;
 
+    }
+    public Personagem(Personagem outro) {
+        this.nome = outro.nome;
+        this.pontosVida = outro.pontosVida;
+        this.ataque = outro.ataque;
+        this.defesa = outro.defesa;
+        this.nivel = outro.nivel;
+        this.experiencia = outro.experiencia;
+        this.experienciaParaProximoNivel = outro.experienciaParaProximoNivel;
+        this.experienciaDadaAoMorrer = outro.experienciaDadaAoMorrer;
+
+        // Cópia profunda (Deep Copy) do Inventario
+        // O Inventario DEVE ter um construtor de cópia
+        this.inventario = new Inventario(outro.inventario);
     }
 
     public String getNome() { return this.nome; }
@@ -163,6 +177,11 @@ public class Personagem {
 
     }
 
+    // Capinho aqui eu fiz a alteração nesse metodo de saquear, foi para isso que tive q fazer os metoods de
+    // clone em inventario e em item O método atual está pegando a referência do item do perdedor e passando
+    //  para o inventário: o item.clone e ivnetario.clone vao garatir que quando o item sai do inventario do inimigo e entra no
+    // nosso boneco ele é uma copia independente, assim faremos o squqe de maneira correta ( a tal da deep copy q o maligno fala toda aula)
+
     private void saquearLoot(Personagem perdedor) {
         Inventario inventarioVencedor = this.getInventario();
         Inventario inventarioPerdedor = perdedor.getInventario();
@@ -177,11 +196,39 @@ public class Personagem {
         System.out.println(this.getNome() + " pega o loot de " + perdedor.getNome() + ":");
 
         for( Item item: itensDoPerdedor){
-            System.out.println("Pegando " + item.getQuantidade() + "x " + item.getNome());
-            inventarioVencedor.adicionarItem(item);
+            // MUDANÇA ESSENCIAL: Clonar o item antes de adicionar ao novo inventário
+            Item itemCopia = item.clone();
+
+            System.out.println("Pegando " + itemCopia.getQuantidade() + "x " + itemCopia.getNome());
+            inventarioVencedor.adicionarItem(itemCopia); // Adiciona a CÓPIA INDEPENDENTE
         }
 
         inventarioPerdedor.esvaziar();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        // Clona o Personagem e seu Inventário
+        Personagem clone = (Personagem) super.clone();
+
+        // Faz a cópia profunda do Inventário
+        clone.inventario = (Inventario) this.inventario.clone();
+
+        return clone;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Nome: %s | Vida: %d | Ataque: %d | Defesa: %d | Nível: %d | XP: %d/%d",
+                this.nome,
+                this.pontosVida,
+                this.ataque,
+                this.defesa,
+                this.nivel,
+                this.experiencia,
+                this.experienciaParaProximoNivel
+        );
     }
 
 
