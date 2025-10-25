@@ -2,7 +2,7 @@ package rpgtexto;
 
 import java.util.Objects;
 
-public class Item {
+public class Item implements Cloneable , Comparable<Item>{
     private String nome;
     private String descricao;
     private String efeito;
@@ -73,5 +73,22 @@ public class Item {
     public int hashCode() {
 
         return Objects.hash(this.nome, this.descricao, this.efeito);
+    }
+
+    @Override
+    public Item clone() {
+        try {
+            // A chamada a super.clone() já é suficiente (Shallow Copy)
+            // porque todos os atributos são primitivos ou imutáveis (String)
+            return (Item) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Isso não deve acontecer, pois implementamos Cloneable
+            throw new InternalError(e);
+        }
+    }
+
+    @Override
+    public int compareTo(Item outro) {
+        return this.nome.compareTo(outro.nome);
     }
 }
