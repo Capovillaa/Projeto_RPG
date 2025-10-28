@@ -81,14 +81,38 @@ public class Inventario implements Cloneable {
         }
     }
 
-    public Item selecionarItem (String nomeDoItem) throws Exception{
+    public Item selecionarItem (String nomeDoItem) {
 
         Item itemEncontrado = buscarItemPeloNome(nomeDoItem);
 
         if (itemEncontrado == null) {
-            throw new Exception("Item " + nomeDoItem + " nao encontrado no inventario");
+            System.out.println("Item " + nomeDoItem + " nao encontrado no inventario");
         }
         return itemEncontrado;
+    }
+
+    public void usarItem (String nomeDoItem,Personagem usuario) {
+        Item itemEncontrado = buscarItemPeloNome(nomeDoItem);
+
+        if (itemEncontrado == null) {
+            System.out.println("Item " + nomeDoItem + " nao encontrado no inventario");
+            return;
+        }
+
+        itemEncontrado.aplicarEfeito(usuario);
+
+        int novaQuantidade = itemEncontrado.getQuantidade() - 1;
+        itemEncontrado.setQuantidade(novaQuantidade);
+
+        System.out.println(itemEncontrado.getNome() + " foi utilizado.");
+
+        if (novaQuantidade <= 0) {
+            this.itens.remove(itemEncontrado);
+            System.out.println(itemEncontrado.getNome() + " acabou!!! encontre mais para utilizar");
+        } else {
+            System.out.printf("Quantidade restante no inventario: " + novaQuantidade + "x");
+        }
+
     }
 
     public Collection<Item> getTodosOsItens() {
