@@ -144,15 +144,12 @@ public class Inventario implements Cloneable {
 
     @Override
     public Inventario clone() throws CloneNotSupportedException {
-        // 1. Cria uma cópia rasa do objeto Inventario em si (copia a referência do Map)
         Inventario cloneInventario = (Inventario) super.clone();
 
-        // 2. Cria um NOVO Map para a cópia (o clone é shallow por padrão, precisamos do Deep Copy)
         cloneInventario.itens = new ArrayList<>();
 
-        // 3. Itera para clonar CADA Item do inventário original
         for (Item itemOriginal : this.itens) {
-            Item itemCopia = itemOriginal.clone(); // Chama o clone() do Item
+            Item itemCopia = itemOriginal.clone();
             cloneInventario.itens.add(itemCopia);
         }
 
