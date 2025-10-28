@@ -108,11 +108,8 @@ public class Item implements Cloneable , Comparable<Item>{
     @Override
     public Item clone() {
         try {
-            // A chamada a super.clone() já é suficiente (Shallow Copy)
-            // porque todos os atributos são primitivos ou imutáveis (String)
             return (Item) super.clone();
         } catch (CloneNotSupportedException e) {
-            // Isso não deve acontecer, pois implementamos Cloneable
             throw new InternalError(e);
         }
     }

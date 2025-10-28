@@ -35,8 +35,6 @@ public abstract class Personagem implements Cloneable {
         this.experienciaParaProximoNivel = outro.experienciaParaProximoNivel;
         this.experienciaDadaAoMorrer = outro.experienciaDadaAoMorrer;
 
-        // Cópia profunda (Deep Copy) do Inventario
-        // O Inventario DEVE ter um construtor de cópia
         this.inventario = new Inventario(outro.inventario);
     }
 
@@ -177,11 +175,6 @@ public abstract class Personagem implements Cloneable {
 
     }
 
-    // Capinho aqui eu fiz a alteração nesse metodo de saquear, foi para isso que tive q fazer os metoods de
-    // clone em inventario e em item O método atual está pegando a referência do item do perdedor e passando
-    //  para o inventário: o item.clone e ivnetario.clone vao garatir que quando o item sai do inventario do inimigo e entra no
-    // nosso boneco ele é uma copia independente, assim faremos o squqe de maneira correta ( a tal da deep copy q o maligno fala toda aula)
-
     private void saquearLoot(Personagem perdedor) {
         Inventario inventarioVencedor = this.getInventario();
         Inventario inventarioPerdedor = perdedor.getInventario();
@@ -200,7 +193,7 @@ public abstract class Personagem implements Cloneable {
             Item itemCopia = item.clone();
 
             System.out.println("Pegando " + itemCopia.getQuantidade() + "x " + itemCopia.getNome());
-            inventarioVencedor.adicionarItem(itemCopia); // Adiciona a CÓPIA INDEPENDENTE
+            inventarioVencedor.adicionarItem(itemCopia);
         }
 
         inventarioPerdedor.esvaziar();
