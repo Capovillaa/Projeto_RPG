@@ -4,82 +4,95 @@ import java.util.*;
 
 public class Inventario implements Cloneable {
 
-    private Map<String, Item> itens;
+    private List<Item> itens;
 
     public Inventario ()
     {
-        this.itens = new HashMap<>();
+        this.itens = new ArrayList<>();
     }
 
     public Inventario(Inventario outro) {
-        this.itens = new HashMap<>();
+        this.itens = new ArrayList<>();
 
-        for (Item itemOriginal : outro.itens.values()) {
+        for (Item itemOriginal : outro.itens) {
 
             Item itemCopia = itemOriginal.clone();
 
-            this.itens.put(itemCopia.getNome(), itemCopia);
+            this.itens.add(itemCopia);
         }
     }
 
 
-    public void adicionarItem (Item itemParaAdicionar)
-    {
-        if (this.itens.containsKey(itemParaAdicionar.getNome())) {
+    public void adicionarItem (Item itemParaAdicionar) {
+        Item itemExistente = null;
 
-            Item itemNoInventario = this.itens.get(itemParaAdicionar.getNome());
+        for (Item itemNoInventario: this.itens) {
+            if(itemNoInventario.equals(itemParaAdicionar)){
+                itemExistente = itemNoInventario;
+                break;
+            }
+        }
 
-            int quantidadeAtual = itemNoInventario.getQuantidade();
+        if (itemExistente != null) {
+            int quantidadeAtual = itemExistente.getQuantidade();
             int quantidadeParaAdicionar = itemParaAdicionar.getQuantidade();
-
             int novaQuantidade = quantidadeAtual + quantidadeParaAdicionar;
-            itemNoInventario.setQuantidade(novaQuantidade);
-            System.out.println("Item " + itemNoInventario.getNome() + " atualizado no inventário.\nAgora voce possui: " + novaQuantidade);
 
-        } else{
-            this.itens.put(itemParaAdicionar.getNome(), itemParaAdicionar);
+            itemExistente.setQuantidade(novaQuantidade);
 
+            System.out.println("Item " + itemExistente.getNome() + " atualizado no inventário.\nAgora voce possui: " + novaQuantidade);
+        } else {
+            this.itens.add(itemParaAdicionar);
             System.out.println("Voce achou um novo item!!! " + itemParaAdicionar.getNome() + ".\nItem adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
         }
 
     }
 
+    private Item buscarItemPeloNome (String nomeItem) {
+        for (Item item : this.itens) {
+            if (item.getNome().equalsIgnoreCase(nomeItem)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public void removerItem (String nomeItem, int quantidadeParaRemover) {
-        if (!this.itens.containsKey(nomeItem)) {
+
+        Item itemNoInventario = buscarItemPeloNome(nomeItem);
+
+        if (itemNoInventario == null) {
             System.out.println("Item " + nomeItem + " não encontrado no inventário.");
             return;
         }
 
-        Item itemNoInventario = this.itens.get(nomeItem);
         int quantidadeAtual = itemNoInventario.getQuantidade();
 
         if (quantidadeAtual < quantidadeParaRemover) {
-            System.out.println("Quantidade insuficiente de " + nomeItem + ".");
+            System.out.println("Quantidade insuficiente de " + nomeItem + " para remover.");
             return;
         }
 
         int novaQuantidade = quantidadeAtual - quantidadeParaRemover;
         itemNoInventario.setQuantidade(novaQuantidade);
-        System.out.println("Removido " + quantidadeParaRemover + "x " + nomeItem + ".");
 
         if (novaQuantidade <= 0) {
-            this.itens.remove(nomeItem);
-            System.out.println(nomeItem + " esgotado e removido do inventário.");
-        }else {
-            System.out.println("Quantidade restante: " + novaQuantidade + "x " + nomeItem + ".");
+            this.itens.remove(itemNoInventario);
         }
     }
 
     public Item selecionarItem (String nomeDoItem) throws Exception{
 
-        if (!this.itens.containsKey(nomeDoItem)){
-            throw new Exception("Item nao encontrado no inventario");
+        Item itemEncontrado = buscarItemPeloNome(nomeDoItem);
+
+        if (itemEncontrado == null) {
+            throw new Exception("Item " + nomeDoItem + " nao encontrado no inventario");
         }
-        return this.itens.get(nomeDoItem);
+        return itemEncontrado;
     }
 
     public Collection<Item> getTodosOsItens() {
-        return this.itens.values();
+        return this.itens;
     }
 
     public void esvaziar() {
@@ -87,15 +100,14 @@ public class Inventario implements Cloneable {
     }
 
     @Override
-    public String toString ()
-    {
+    public String toString() {
         if (this.itens.isEmpty()) {
             return "Inventario vazio.";
         }
 
         String resultado = "--- INVENTARIO ORDENADO ---\n";
 
-        List<Item> itensOrdenados = new ArrayList<>(this.itens.values());
+        List<Item> itensOrdenados = new ArrayList<>(this.itens);//fazemos uma cópia para nao alterar a original
 
         Collections.sort(itensOrdenados);
 
@@ -112,12 +124,12 @@ public class Inventario implements Cloneable {
         Inventario cloneInventario = (Inventario) super.clone();
 
         // 2. Cria um NOVO Map para a cópia (o clone é shallow por padrão, precisamos do Deep Copy)
-        cloneInventario.itens = new HashMap<>();
+        cloneInventario.itens = new ArrayList<>();
 
         // 3. Itera para clonar CADA Item do inventário original
-        for (Item itemOriginal : this.itens.values()) {
+        for (Item itemOriginal : this.itens) {
             Item itemCopia = itemOriginal.clone(); // Chama o clone() do Item
-            cloneInventario.itens.put(itemCopia.getNome(), itemCopia);
+            cloneInventario.itens.add(itemCopia);
         }
 
         return cloneInventario;
