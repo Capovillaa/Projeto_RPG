@@ -6,15 +6,19 @@ public class Item implements Cloneable , Comparable<Item>{
     private String nome;
     private String descricao;
     private String efeito;
+    private int valorDoEfeito;
     private int quantidade;
+    private int codigoDoItem;
 
 
-    public Item (String nome,String descricao,String efeito,int quantidade)
+    public Item (String nome,String descricao,String efeito,int valorDoEfeito, int quantidade, int codigoDoItem)
     {
         this.nome = nome;
         this.descricao = descricao;
         this.efeito = efeito;
+        this.valorDoEfeito = valorDoEfeito;
         this.quantidade = quantidade;
+        this.codigoDoItem = codigoDoItem;
 
     }
 
@@ -43,7 +47,25 @@ public class Item implements Cloneable , Comparable<Item>{
         return this.quantidade;
     }
 
+    public void usarItem (Personagem usuario) {
 
+        switch (this.codigoDoItem) {
+            case 1:
+                System.out.println(usuario.getNome() + " usa " + this.getNome());
+                usuario.setPontosVida(usuario.getPontosVida() + this.valorDoEfeito);
+                break;
+            case 2:
+                System.out.println(usuario.getNome() + " usa " + this.getNome());
+                usuario.setAtaque(usuario.getAtaque() + this.valorDoEfeito);
+                break;
+            case 3:
+                System.out.println(usuario.getNome() + " usa " + this.getNome());
+                usuario.setDefesa(usuario.getDefesa() + this.valorDoEfeito);
+                break;
+            default:
+                System.out.println(this.getNome() + " não pode ser usado agora");
+        }
+    }
 
     @Override
     public String toString ()

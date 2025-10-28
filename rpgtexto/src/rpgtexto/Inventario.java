@@ -10,6 +10,7 @@ public class Inventario implements Cloneable {
     {
         this.itens = new HashMap<>();
     }
+
     public Inventario(Inventario outro) {
         this.itens = new HashMap<>();
 
@@ -43,7 +44,7 @@ public class Inventario implements Cloneable {
 
     }
 
-    public boolean removerItem(String nomeItem, int quantidadeParaRemover) {
+    public boolean removerItem (String nomeItem, int quantidadeParaRemover) {
         if (!this.itens.containsKey(nomeItem)) {
             System.out.println("Item " + nomeItem + " não encontrado no inventário.");
             return false;
@@ -66,6 +67,14 @@ public class Inventario implements Cloneable {
             System.out.println(nomeItem + " esgotado e removido do inventário.");
         }
         return true;
+    }
+
+    public Item selecionarItem (String nomeDoItem) throws Exception{
+
+        if (!this.itens.containsKey(nomeDoItem)){
+            throw new Exception("Item nao encontrado no inventario");
+        }
+        return this.itens.get(nomeDoItem);
     }
 
     public Collection<Item> getTodosOsItens() {
