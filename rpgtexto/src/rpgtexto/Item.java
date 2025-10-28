@@ -49,18 +49,26 @@ public class Item implements Cloneable , Comparable<Item>{
 
     public void usarItem (Personagem usuario) {
 
+        if (this.quantidade <= 0) {
+            System.out.println("Não há mais " + this.getNome() + " para usar!");
+            return;
+        }
+
         switch (this.codigoDoItem) {
             case 1:
                 System.out.println(usuario.getNome() + " usa " + this.getNome());
                 usuario.setPontosVida(usuario.getPontosVida() + this.valorDoEfeito);
+                this.quantidade--;
                 break;
             case 2:
                 System.out.println(usuario.getNome() + " usa " + this.getNome());
                 usuario.setAtaque(usuario.getAtaque() + this.valorDoEfeito);
+                this.quantidade--;
                 break;
             case 3:
                 System.out.println(usuario.getNome() + " usa " + this.getNome());
                 usuario.setDefesa(usuario.getDefesa() + this.valorDoEfeito);
+                this.quantidade--;
                 break;
             default:
                 System.out.println(this.getNome() + " não pode ser usado agora");
@@ -111,6 +119,6 @@ public class Item implements Cloneable , Comparable<Item>{
 
     @Override
     public int compareTo(Item outro) {
-        return this.nome.compareTo(outro.nome);
+        return this.nome.compareTo(outro.getNome());
     }
 }
