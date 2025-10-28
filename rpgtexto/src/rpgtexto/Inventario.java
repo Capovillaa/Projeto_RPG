@@ -44,10 +44,10 @@ public class Inventario implements Cloneable {
 
     }
 
-    public boolean removerItem (String nomeItem, int quantidadeParaRemover) {
+    public void removerItem (String nomeItem, int quantidadeParaRemover) {
         if (!this.itens.containsKey(nomeItem)) {
             System.out.println("Item " + nomeItem + " não encontrado no inventário.");
-            return false;
+            return;
         }
 
         Item itemNoInventario = this.itens.get(nomeItem);
@@ -55,7 +55,7 @@ public class Inventario implements Cloneable {
 
         if (quantidadeAtual < quantidadeParaRemover) {
             System.out.println("Quantidade insuficiente de " + nomeItem + ".");
-            return false;
+            return;
         }
 
         int novaQuantidade = quantidadeAtual - quantidadeParaRemover;
@@ -65,8 +65,9 @@ public class Inventario implements Cloneable {
         if (novaQuantidade <= 0) {
             this.itens.remove(nomeItem);
             System.out.println(nomeItem + " esgotado e removido do inventário.");
+        }else {
+            System.out.println("Quantidade restante: " + novaQuantidade + "x " + nomeItem + ".");
         }
-        return true;
     }
 
     public Item selecionarItem (String nomeDoItem) throws Exception{
