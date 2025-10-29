@@ -12,6 +12,8 @@ public abstract class Personagem implements Cloneable {
     private Inventario inventario;
     private int experienciaParaProximoNivel;
     private int experienciaDadaAoMorrer;
+    private int turnosParaRecargaEspecial; // Contador para o cooldown
+    private final int COOLDOWN_MAXIMO = 3; // Define que o poder recarrega em 3 turnos (você pode ajustar este valor)
 
     public Personagem(String nome, int pontosVida, int ataque, int defesa, int experienciaDadaAoMorrer) {
         this.nome = nome;
@@ -23,6 +25,7 @@ public abstract class Personagem implements Cloneable {
         this.experiencia = 0;
         this.inventario = new Inventario();
         this.experienciaParaProximoNivel = 100;
+        this.turnosParaRecargaEspecial = 0;
 
     }
     public Personagem(Personagem outro) {
@@ -34,8 +37,8 @@ public abstract class Personagem implements Cloneable {
         this.experiencia = outro.experiencia;
         this.experienciaParaProximoNivel = outro.experienciaParaProximoNivel;
         this.experienciaDadaAoMorrer = outro.experienciaDadaAoMorrer;
-
         this.inventario = new Inventario(outro.inventario);
+        this.turnosParaRecargaEspecial = outro.turnosParaRecargaEspecial;
     }
 
     public String getNome() { return this.nome; }
@@ -61,6 +64,8 @@ public abstract class Personagem implements Cloneable {
     public int getExperienciaDadaAoMorrer() { return this.experienciaDadaAoMorrer; }
 
     public Inventario getInventario() { return this.inventario; }
+
+    public int getTurnosParaRecargaEspecial() { return this.turnosParaRecargaEspecial; }
 
     public void setPontosVida(int vida) { this.pontosVida = vida; }
 
@@ -132,6 +137,29 @@ public abstract class Personagem implements Cloneable {
             setPontosVida(vidaPersonagem);
 
             System.out.println(this.nome + " sofreu um ataque de " + danoRecebido + " dano!!!");
+        }
+    }
+
+    public boolean tentarUsarEspecial(Personagem alvo) {
+        if (this.turnosParaRecargaEspecial > 0) {
+            System.out.println("O Poder Especial ainda está em recarga! (" + this.turnosParaRecargaEspecial + " turnos restantes).");
+            return false;
+        }
+
+        this.usarPoderEspecial(alvo);
+
+        this.turnosParaRecargaEspecial = COOLDOWN_MAXIMO;
+        return true;
+    }
+
+    public abstract void usarPoderEspecial(Personagem alvo);
+
+    public void diminuirRecarga() {
+        if (this.turnosParaRecargaEspecial > 0) {
+            this.turnosParaRecargaEspecial--;
+            if (this.turnosParaRecargaEspecial == 0) {
+                System.out.println(this.getNome() + ": Poder Especial pronto!");
+            }
         }
     }
 
