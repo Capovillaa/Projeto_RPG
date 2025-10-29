@@ -15,5 +15,10 @@ public class Inimigo extends Personagem {
     public String toString() {
         return "Inimigo: " + super.toString();
     }
+
+    @Override
+    public void usarPoderEspecial(Personagem alvo) {
+        System.out.println(this.getNome() + " tenta fazer algo, mas não tem poder especial.");
+    }
 }
 
