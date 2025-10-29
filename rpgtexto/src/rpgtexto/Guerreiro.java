@@ -16,5 +16,23 @@ public class Guerreiro extends Personagem {
     public String toString() {
         return "Classe: Guerreiro | " + super.toString();
     }
+
+    @Override
+    public void usarPoderEspecial(Personagem alvo) {
+        System.out.println("---------------------------------");
+        System.out.println(this.getNome() + " concentra sua fúria em uma Cura de Combate (PODER ESPECIAL)!");
+
+        int valorCura = this.getDefesa() + 15;
+
+        int vidaAtual = this.getPontosVida();
+        int novaVida = vidaAtual + valorCura;
+
+        this.setPontosVida(novaVida);
+
+        System.out.println(this.getNome() + " se cura em " + valorCura + " pontos de vida.");
+        System.out.println("Vida atual: " + this.getPontosVida());
+
+        System.out.println("---------------------------------");
+    }
 }
 
