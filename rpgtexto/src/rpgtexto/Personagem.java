@@ -12,8 +12,8 @@ public abstract class Personagem implements Cloneable {
     private Inventario inventario;
     private int experienciaParaProximoNivel;
     private int experienciaDadaAoMorrer;
-    private int turnosParaRecargaEspecial; // Contador para o cooldown
-    private final int COOLDOWN_MAXIMO = 3; // Define que o poder recarrega em 3 turnos (você pode ajustar este valor)
+    private int turnosParaRecargaEspecial;
+    private final int COOLDOWN_MAXIMO = 3;
 
     public Personagem(String nome, int pontosVida, int ataque, int defesa, int experienciaDadaAoMorrer) {
         this.nome = nome;
