@@ -1,6 +1,7 @@
 package rpgtexto;
 
 import java.util.Collection;
+import java.util.Scanner;
 
 public abstract class Personagem implements Cloneable {
     private String nome;
@@ -14,6 +15,7 @@ public abstract class Personagem implements Cloneable {
     private int experienciaDadaAoMorrer;
     private int turnosParaRecargaEspecial;
     private final int COOLDOWN_MAXIMO = 3;
+    public static Scanner scanner = new Scanner(System.in);
 
     public Personagem(String nome, int pontosVida, int ataque, int defesa, int experienciaDadaAoMorrer) {
         this.nome = nome;
@@ -73,6 +75,8 @@ public abstract class Personagem implements Cloneable {
 
     public void setDefesa(int novoValorDefesa) { this.defesa = novoValorDefesa; }
 
+    public void setTurnosParaRecargaEspecial() { this.turnosParaRecargaEspecial = COOLDOWN_MAXIMO; };
+
     private void uparNivel(int novoNivel) {
         this.nivel = novoNivel;
         System.out.println("\n---------------------------------");
@@ -115,9 +119,8 @@ public abstract class Personagem implements Cloneable {
     }
 
     public int calcularValorAtaque(){
-        Dado dado = new Dado();
 
-        int valorRolagemDado = dado.rolarDado();
+        int valorRolagemDado = Dado.rolarDado();
         int valorDoAtaque = this.ataque + valorRolagemDado;
 
         System.out.println(this.nome + " prepara um ataque com força " + valorDoAtaque + " (Ataque: " + this.ataque + " + Dado: " + valorRolagemDado + ")");
@@ -136,7 +139,7 @@ public abstract class Personagem implements Cloneable {
             vidaPersonagem -= danoRecebido;
             setPontosVida(vidaPersonagem);
 
-            System.out.println(this.nome + " sofreu um ataque de " + danoRecebido + " dano!!!");
+            System.out.println(this.nome + " defendeu " + this.getDefesa() + " de dano sofrendo um ataque de " + danoRecebido + " dano!!!");
         }
     }
 
@@ -148,11 +151,14 @@ public abstract class Personagem implements Cloneable {
 
         this.usarPoderEspecial(alvo);
 
-        this.turnosParaRecargaEspecial = COOLDOWN_MAXIMO;
+        this.setTurnosParaRecargaEspecial();
+
         return true;
     }
 
     public abstract void usarPoderEspecial(Personagem alvo);
+
+    public abstract void tomarAcao (Personagem alvo);
 
     public void diminuirRecarga() {
         if (this.turnosParaRecargaEspecial > 0) {
@@ -166,39 +172,56 @@ public abstract class Personagem implements Cloneable {
     public void atacar(Personagem inimigo) {
 
         int valorDoAtaque = calcularValorAtaque();
-        System.out.println(this.nome + " ataca " + inimigo.getNome() + "!");
+        System.out.println(this.nome + " ataca " + inimigo.getNome() + "! com um ataque basico.");
         inimigo.receberDano(valorDoAtaque);
     }
 
     public void batalhar(Personagem inimigo){
         System.out.println("---------------BATALHA INICIADA---------------");
-        System.out.println(this.nome + " (Vida: " + this.pontosVida + ") VS " + inimigo.getNome() + " (Vida: " + inimigo.getPontosVida() + ")");
 
         int turno = 1;
 
         while(this.estaVivo() && inimigo.estaVivo()){
+
             System.out.println("\n--- Turno " + turno + " ---");
-            int danoDoHeroi = this.calcularValorAtaque();
-            int danoDoInimigo = inimigo.calcularValorAtaque();
-            System.out.println(this.nome + " ataca!!");
-            inimigo.receberDano(danoDoHeroi);
-            System.out.println(inimigo.nome + " ataca!!");
-            this.receberDano(danoDoInimigo);
+            System.out.println(this.getNome() + " (Vida: " + this.getPontosVida() + ") | Cooldown Especial: " + this.getTurnosParaRecargaEspecial() + "t");
+            System.out.println(inimigo.getNome() + " (Vida: " + inimigo.getPontosVida() + ") | Cooldown Especial: " + inimigo.getTurnosParaRecargaEspecial() + "t");
+            System.out.println("---------------------------------");
+
+            System.out.println(">> Turno de " + this.getNome() + ":");
+            this.tomarAcao(inimigo);
+
+            if (!inimigo.estaVivo())
+            {
+                break;
+            }
+
+            System.out.println(">> Turno de " + inimigo.getNome() + ":");
+            inimigo.tomarAcao(this);
+
+            if (!this.estaVivo())
+            {
+                break;
+            }
+
+            this.diminuirRecarga();
+            inimigo.diminuirRecarga();
 
             turno++;
         }
+
         System.out.println("\n---------------BATALHA FINALIZADA---------------");
 
         if( this.estaVivo() && !inimigo.estaVivo()){
-
-            System.out.println(this.getNome() + "Venceu a batalha!!");
+            this.setPontosVida(this.getPontosVida() + 25);
+            System.out.println(this.getNome() + " Venceu a batalha!!");
             this.ganharExperiencia(inimigo.getExperienciaDadaAoMorrer());
             this.saquearLoot(inimigo);
 
         } else if( !this.estaVivo() && inimigo.estaVivo()){
-            System.out.println(inimigo.getNome() + "Te derrotou na batalha!!");
+            System.out.println(inimigo.getNome() + " Te derrotou na batalha!!");
         } else{
-            System.out.println();
+            System.out.println("os dois morreram");
         }
 
     }

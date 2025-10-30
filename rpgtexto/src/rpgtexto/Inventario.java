@@ -91,12 +91,12 @@ public class Inventario implements Cloneable {
         return itemEncontrado;
     }
 
-    public void usarItem (String nomeDoItem,Personagem usuario) {
+    public boolean usarItem (String nomeDoItem,Personagem usuario) {
         Item itemEncontrado = buscarItemPeloNome(nomeDoItem);
 
         if (itemEncontrado == null) {
             System.out.println("Item " + nomeDoItem + " nao encontrado no inventario");
-            return;
+            return false;
         }
 
         itemEncontrado.aplicarEfeito(usuario);
@@ -110,8 +110,9 @@ public class Inventario implements Cloneable {
             this.itens.remove(itemEncontrado);
             System.out.println(itemEncontrado.getNome() + " acabou!!! encontre mais para utilizar");
         } else {
-            System.out.printf("Quantidade restante no inventario: " + novaQuantidade + "x");
+            System.out.println("Quantidade restante no inventario: " + novaQuantidade + "x");
         }
+        return true;
 
     }
 
@@ -121,6 +122,28 @@ public class Inventario implements Cloneable {
 
     public void esvaziar() {
         this.itens.clear();
+    }
+
+    public void mostrarInventarioParaUso (){
+        System.out.println("---Seu Inventario---");
+
+        if (this.itens.isEmpty()){
+            System.out.println("Inventario esta vazio...");
+        } else{
+            for (int i = 0; i < this.itens.size(); i++) {
+                Item item = itens.get(i);
+                System.out.println(i + "-" + item.getNome() + " (" + item.getQuantidade() + "x)");
+            }
+        }
+        System.out.println(" -1. Voltar / Cancelar");
+        System.out.println("------------------------");
+    }
+
+    public Item getItemPorIndice (int indice) {
+        if (indice >= 0 && indice < this.itens.size()) {
+            return this.itens.get(indice);
+        }
+        return null;
     }
 
     @Override
