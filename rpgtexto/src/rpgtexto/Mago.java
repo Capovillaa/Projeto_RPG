@@ -5,10 +5,9 @@ import java.util.Scanner;
 public class Mago extends Personagem {
 
     public Mago(String nome) {
-        super(nome, 80, 30, 5, 0);
+        super(nome, 100, 35, 5, 0);
     }
 
-    // Construtor de Cópia
     public Mago(Mago outro) {
         super(outro);
     }
@@ -62,7 +61,6 @@ public class Mago extends Personagem {
         alvo.receberDano(danoFixo);
 
         System.out.println(" IMPACTO MÁXIMO! O feitiço atingiu " + alvo.getNome());
-        System.out.println("---------------------------------");
     }
 
     @Override

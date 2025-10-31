@@ -43,7 +43,7 @@ public class Inventario implements Cloneable {
             System.out.println("Item " + itemExistente.getNome() + " atualizado no inventário.\nAgora voce possui: " + novaQuantidade);
         } else {
             this.itens.add(itemParaAdicionar);
-            System.out.println("Voce achou um novo item!!! " + itemParaAdicionar.getNome() + ".\nItem adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
+            System.out.println("Voce achou um novo item!!! " + itemParaAdicionar.getDescricao() + ".\nItem adicionado ao inventário.\nQuantidade: " + itemParaAdicionar.getQuantidade());
         }
 
     }
@@ -154,7 +154,7 @@ public class Inventario implements Cloneable {
 
         String resultado = "--- INVENTARIO ORDENADO ---\n";
 
-        List<Item> itensOrdenados = new ArrayList<>(this.itens);//fazemos uma cópia para nao alterar a original
+        List<Item> itensOrdenados = new ArrayList<>(this.itens); //fazemos uma cópia para nao alterar a original
 
         Collections.sort(itensOrdenados);
 

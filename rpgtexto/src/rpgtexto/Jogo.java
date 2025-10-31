@@ -16,8 +16,6 @@ public class Jogo {
         Jogo jogo = new Jogo();
     }
 
-    // BLOCO 1: MÉTODOS DE CONTROLE
-
     public void iniciarJogo() {
         apresentacao();
         criarPersonagem();
@@ -107,7 +105,6 @@ public class Jogo {
         }
     }
 
-    // bloco 2: MÉTODOS DE ENCONTRO
 
     private void encontroInimigo(Inimigo inimigo) {
         System.out.println("\n==================================================");
@@ -152,7 +149,6 @@ public class Jogo {
         }
     }
 
-    //  BLOCO 3: NARRATIVA DA JORNADA
 
     private void iniciarJornada() {
 
@@ -196,8 +192,10 @@ public class Jogo {
     private void caminhoSombrio() {
         System.out.println("\nVocê escolheu o Caminho Sombrio. A tensão é palpável. O chão parece sugar o som de seus passos.");
 
-        Inimigo Lobo = new Inimigo("Lobo das Sombras", 80, 22, 7, 50);
-        encontroInimigo(Lobo);
+        Inimigo lobo = new Inimigo("Lobo das Sombras", 85, 22, 7, 50);
+        Item presasDoLobo = new Item("PRESAS DO LOBO", "Aumenta o ataque", "Ataque", 30, 1, 2);
+        lobo.getInventario().adicionarItem(presasDoLobo);
+        encontroInimigo(lobo);
 
         if (heroi.estaVivo()) {
             System.out.println("\nCom o Lobo das Sombras derrotado, o silêncio retorna. Você segue adiante.");
@@ -210,17 +208,17 @@ public class Jogo {
     private void caminhoBarulhento() {
         System.out.println("\nVocê segue o caminho iluminado, mas o barulho constante o deixa em alerta.");
 
-        System.out.println("Você encontra um brilho na água do riacho. É uma poção abandonada!");
-        encontrarItem("POÇÃO PELE DE PEDRA", "Dá uma camada protetora temporária.", "Defesa", 10, 1, 2);
+        System.out.println("Você encontra um brilho na água do riacho. É uma espada!");
+        encontrarItem("ESPADA LONGA", "Dano alto", "Ataque", 40, 1, 2);
 
         System.out.println("\nCom o crepúsculo, você decide montar acampamento rapidamente. Mal coloca sua mochila no chão...");
         System.out.println("Um ruído alto e uma criatura salta das sombras! Você é pego de surpresa!");
 
-        Inimigo PeixeMaluco = new Inimigo("Goblin Roxo", 100, 10, 5, 50);
-        encontroInimigo(PeixeMaluco);
+        Inimigo Serpente = new Inimigo("Serpente do Riacho", 100, 20, 5, 50);
+        encontroInimigo(Serpente);
 
         if (heroi.estaVivo()) {
-            System.out.println("\nCom o Goblin derrotado, você finalmente consegue acender uma fogueira. O descanso é breve, mas necessário.");
+            System.out.println("\nCom a serpente derrotada, você finalmente consegue acender uma fogueira. O descanso é breve, mas necessário.");
             System.out.println("Ao amanhecer, você segue a trilha e avista fumaça no horizonte, indicando um vilarejo.");
 
             interacaoVilarejo();
@@ -247,10 +245,10 @@ public class Jogo {
                     System.out.println("\nO estalajadeiro empalidece e grita: 'Não sei de nada! Saia daqui!', chamando atenção indesejada.");
                     System.out.println("Dois brutamontes saem das sombras e te cercam!");
 
-                    Inimigo brutamontes = new Inimigo("Brutamontes do Vilarejo", 60, 30, 12, 170);
+                    Inimigo brutamontes = new Inimigo("Brutamontes do Vilarejo", 140, 23, 10, 170);
 
-                    Item espadada = new Item("ESCUDO DE AÇO VALERIANO", "Protege contra mosntros das sombras", "Defesa", 50, 1, 3);
-                    brutamontes.getInventario().adicionarItem(espadada);
+                    Item escudo = new Item("ESCUDO DE AÇO VALERIANO", "Protege contra mosntros das sombras", "Defesa", 30, 1, 3);
+                    brutamontes.getInventario().adicionarItem(escudo);
 
                     encontroInimigo(brutamontes);
 
@@ -272,9 +270,6 @@ public class Jogo {
         }
     }
 
-    // ----------------------------------------------------------------------
-    //                   CAPÍTULO II: A RUÍNA AO NORTE
-    // ----------------------------------------------------------------------
 
     private void irParaRuinaNorte() {
         criarCheckpoint();
@@ -318,16 +313,18 @@ public class Jogo {
     private void combateGolem() {
         System.out.println("\nVocê saca sua arma e ataca o Golem de Pedra! O chão treme com a reação dele.");
 
-        Inimigo golem = new Inimigo("Guardião da Ruína (Golem)", 10, 40, 20, 250);
+        Inimigo golem = new Inimigo("Guardião da Ruína (Golem)", 200, 35, 20, 400);
 
+        Item pocaoPedra = new Item("POÇÃO PELE DE PEDRA", "REforça a armadura", "Defesa", 30, 1, 3);
+        golem.getInventario().adicionarItem(pocaoPedra);
         encontroInimigo(golem);
+
 
         if (heroi.estaVivo()) {
             System.out.println("\nO Guardião se desfaz em pó. Você pega o pergaminho.");
             System.out.println("Ele revela a localização final da Feiticeira...");
             iniciarUltimoCapitulo();
         }
-        // Se não estiver vivo, o loopCombate já chamou processarDerrota e reiniciou.
     }
 
     private void decifrarInscricao() {
@@ -345,13 +342,8 @@ public class Jogo {
 
             combateGolem();
 
-            // Se o herói vencer o combate forçado, ele lê o pergaminho e o fluxo continua via combateGolem().
         }
     }
-
-    // ----------------------------------------------------------------------
-    //                   CAPÍTULO III: A CIDADELA CONGELADA (FINAL)
-    // ----------------------------------------------------------------------
 
     private void iniciarUltimoCapitulo() {
         criarCheckpoint(); // Checkpoint final antes do chefe
@@ -361,12 +353,11 @@ public class Jogo {
 
         System.out.println("No topo, você encontra a Cidadela. O Elmo está à vista, guardado pela... FEITICEIRA DA NÉVOA!");
 
-        // Combate Final
         encontroChefeFinal();
     }
 
     private void encontroChefeFinal() {
-        Inimigo feiticeira = new Inimigo("Feiticeira da Névoa", 200, 50, 30, 1000);
+        Inimigo feiticeira = new Inimigo("Feiticeira da Névoa", 500, 80, 10, 1000);
 
         System.out.println("\n==================================================");
         System.out.println("!!! CHEFE FINAL: FEITICEIRA DA NÉVOA !!!");
@@ -388,7 +379,7 @@ public class Jogo {
             System.out.println("\nA Feiticeira da Névoa cai, e o poder arcano da Cidadela se dissipa.");
             System.out.println("O Elmo de Aethelred, brilhando com um ouro antigo, está livre no pedestal.");
 
-            Item elmo = new Item("ELMO DE AETHELRED", "A joia da coroa. Valor inestimável.", "Nenhum", 0, 1, 0); // Código 0 para item não usável
+            Item elmo = new Item("ELMO DE AETHELRED", "A joia da coroa. Valor inestimável.", "Cura", 150, 1, 1);
             heroi.getInventario().adicionarItem(elmo);
 
             dilemaFinal();
@@ -438,7 +429,7 @@ public class Jogo {
 
         System.out.println("Após alguns meses, o Exército Real o encontra. Não há como fugir desta vez!");
 
-        Inimigo comandante = new Inimigo("Comandante das Tropas Reais", 400, 70, 40, 0); // HP altíssimo
+        Inimigo comandante = new Inimigo("Comandante das Tropas Reais", 1000, 70, 40, 5000);
 
         System.out.println("\n!!! ÚLTIMA BATALHA !!! Você é cercado pelo " + comandante.getNome() + " e sua guarda!");
         encontroInimigo(comandante);

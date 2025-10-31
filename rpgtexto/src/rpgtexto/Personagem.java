@@ -196,6 +196,8 @@ public abstract class Personagem implements Cloneable {
                 break;
             }
 
+            System.out.println("---------------------------------");
+
             System.out.println(">> Turno de " + inimigo.getNome() + ":");
             inimigo.tomarAcao(this);
 

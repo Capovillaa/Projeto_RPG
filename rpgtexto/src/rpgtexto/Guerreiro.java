@@ -5,11 +5,10 @@ import java.util.Scanner;
 public class Guerreiro extends Personagem {
 
     public Guerreiro(String nome) {
-        super(nome, 120, 25, 10, 0);
+        super(nome, 100, 25, 10, 0);
         System.out.println("Guerreiro " + nome + " criado!");
     }
 
-    // Construtor de Cópia
     public Guerreiro(Guerreiro outro) {
         super(outro);
     }
@@ -101,7 +100,7 @@ public class Guerreiro extends Personagem {
         System.out.println("---------------------------------");
         System.out.println(this.getNome() + " concentra sua fúria em uma Cura de Combate (PODER ESPECIAL)!");
 
-        int valorCura = this.getDefesa() + 15;
+        int valorCura = this.getDefesa() + 30;
 
         int vidaAtual = this.getPontosVida();
         int novaVida = vidaAtual + valorCura;
@@ -110,8 +109,6 @@ public class Guerreiro extends Personagem {
 
         System.out.println(this.getNome() + " se cura em " + valorCura + " pontos de vida.");
         System.out.println("Vida atual: " + this.getPontosVida());
-
-        System.out.println("---------------------------------");
     }
 }
 
