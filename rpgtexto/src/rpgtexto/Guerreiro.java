@@ -14,6 +14,39 @@ public class Guerreiro extends Personagem {
         super(outro);
     }
 
+    private boolean usarItem (Personagem alvo) {
+        Inventario inventario = this.getInventario();
+        inventario.mostrarInventarioParaUso();
+
+        Scanner scanner = Personagem.scanner;
+
+        int escolha = -2;
+
+        System.out.print("Escolha um item para usar: ");
+
+        if (scanner.hasNextInt()){
+            escolha = scanner.nextInt();
+        } else {
+            System.out.println("Entrada invalida");
+            scanner.next();
+            return false;
+        }
+
+        if (escolha == -1) {
+            System.out.println("Fechando o inventario...");
+            return false;
+        }
+
+        Item itemEscolhido = inventario.getItemPorIndice(escolha);
+
+        if (itemEscolhido == null) {
+            System.out.println("Opção invalida");
+            return false;
+        }
+
+        return inventario.usarItem(itemEscolhido.getNome(), this);
+    }
+
     @Override
     public void tomarAcao (Personagem alvo){
         Scanner scanner = Personagem.scanner;
@@ -26,7 +59,6 @@ public class Guerreiro extends Personagem {
         while (!escolhaValida) {
             System.out.println("Escolha: ");
 
-            if (scanner.hasNextInt()) {
                 opt = scanner.nextInt();
 
                 switch (opt) {
@@ -45,9 +77,10 @@ public class Guerreiro extends Personagem {
                         }
                         break;
                     case 3:
-
-
-                        escolhaValida = true;
+                        boolean usouItem = this.usarItem(this);
+                        if(usouItem) {
+                            escolhaValida = true;
+                        }
                         break;
                     default:
                         System.out.println("Digite uma opcao valida");
@@ -57,7 +90,6 @@ public class Guerreiro extends Personagem {
             }
 
         }
-    }
 
     @Override
     public String toString() {

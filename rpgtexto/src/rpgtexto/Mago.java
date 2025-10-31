@@ -76,13 +76,10 @@ public class Mago extends Personagem {
 
         while (!escolhaValida) {
             System.out.println("Escolha: ");
-
-            if (scanner.hasNextInt()) {
                 opt = scanner.nextInt();
 
                 switch (opt) {
                     case 1:
-
                         this.atacar(alvo);
                         escolhaValida = true;
                         break;
@@ -96,7 +93,6 @@ public class Mago extends Personagem {
                         }
                         break;
                     case 3:
-
                         boolean usouItem = this.usarItem(this);
                         if(usouItem) {
                             escolhaValida = true;
@@ -111,5 +107,4 @@ public class Mago extends Personagem {
 
         }
     }
-}
 
