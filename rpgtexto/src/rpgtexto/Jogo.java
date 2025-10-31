@@ -130,12 +130,17 @@ public class Jogo {
         heroi.batalhar(inimigo);
 
         if (!heroi.estaVivo()) {
-            System.out.println("\nVocê foi derrotado! Todo o seu esforço se esvai... Voltando ao último ponto de salvamento.");
+            System.out.println("\nVocê foi derrotado! Todo o seu esforço se esvai...");
             processarDerrota(inimigo.getNome());
         }
     }
 
     private void processarDerrota(String nomeInimigoDerrotado) {
+        if (nomeInimigoDerrotado.contains("Comandante")) {
+            encerrarJogo();
+            return;
+        }
+
         restaurarCheckpoint();
 
         if (nomeInimigoDerrotado.contains("Golem") || nomeInimigoDerrotado.contains("Guardião")) {
@@ -361,18 +366,12 @@ public class Jogo {
     }
 
     private void encontroChefeFinal() {
-        // Criamos a Feiticeira (CHEFÃO FINAL)
-        Inimigo feiticeira = new Inimigo("Feiticeira da Névoa", 250, 50, 30, 1000);
-
-        // Loot de Chefe (O Amuleto pode ser a chave da vitória)
-        Item amuleto = new Item("AMULETO ARCANO", "Aumenta permanentemente a defesa.", "Defesa", 10, 1, 3);
-        feiticeira.getInventario().adicionarItem(amuleto);
+        Inimigo feiticeira = new Inimigo("Feiticeira da Névoa", 200, 50, 30, 1000);
 
         System.out.println("\n==================================================");
         System.out.println("!!! CHEFE FINAL: FEITICEIRA DA NÉVOA !!!");
         System.out.println("==================================================");
 
-        // --- DIÁLOGO INTENSO ---
         System.out.println("\nO ar gélido estala com eletricidade. A Feiticeira da Névoa vira-se lentamente, os olhos brilhando.");
 
         System.out.println("\u001b[35mFEITICEIRA DA NÉVOA:\u001b[0m Interessante... Eu esperava as tropas reais, mas vejo " + heroi.getNome() + ", o " + heroi.getClass().getSimpleName().toUpperCase() + ".");
@@ -383,12 +382,78 @@ public class Jogo {
 
         System.out.println("\u001b[35mFEITICEIRA DA NÉVOA:\u001b[0m Patético. O Elmo é meu. Morra!");
 
-        // Fim do Diálogo, Início do Combate
         encontroInimigo(feiticeira);
+
+        if (heroi.estaVivo()) {
+            System.out.println("\nA Feiticeira da Névoa cai, e o poder arcano da Cidadela se dissipa.");
+            System.out.println("O Elmo de Aethelred, brilhando com um ouro antigo, está livre no pedestal.");
+
+            Item elmo = new Item("ELMO DE AETHELRED", "A joia da coroa. Valor inestimável.", "Nenhum", 0, 1, 0); // Código 0 para item não usável
+            heroi.getInventario().adicionarItem(elmo);
+
+            dilemaFinal();
+        }
     }
 
-    //Apos derrotar o boss final vcc decide se resolve devolver o elmo para o reino ou se decide fugir com o elmo, casqo decida devolver vc sera aclamado e
-    //todos irao um dia te dveer um favor, caso resolva fugir as tropas do reino irao atras sde voce e voce ainda tera uma ultima batalha em que provavelmente ira morrer
-    //e assim acabara a historia
+    private void dilemaFinal() {
+        System.out.println("\nVocê está com o Elmo de Aethelred nas mãos. Sua mente está dividida:");
+        System.out.println(" [1] Devolver o Elmo ao Reino (Honra e Glória).");
+        System.out.println(" [2] Fugir com o Elmo (Riqueza, mas com Risco de Perseguição).");
+
+        String escolhaAcao = "";
+        boolean escolhaValida = false;
+
+        while (!escolhaValida) {
+            System.out.print("\nSua decisão final (1 ou 2): ");
+            escolhaAcao = scanner.nextLine();
+
+            switch (escolhaAcao) {
+                case "1":
+                    finalizarJogoVitoria();
+                    escolhaValida = true;
+                    break;
+                case "2":
+                    finalizarJogoDerrotaForcada();
+                    escolhaValida = true;
+                    break;
+                default:
+                    System.out.println(" Opção inválida. Digite 1 ou 2.");
+            }
+        }
+    }
+
+    private void finalizarJogoVitoria() {
+        System.out.println("\n**************************************************");
+        System.out.println("FIM: O HERÓI DO REINO");
+        System.out.println("Você devolve o Elmo. O Reino o aclama! Você é coberto de riquezas e passará o restante de seus dias com muito vinho e muita riqueza.");
+        System.out.println("Status Final de " + heroi.getNome() + ":");
+        System.out.println(heroi.toString());
+        System.out.println("**************************************************");
+    }
+
+    private void finalizarJogoDerrotaForcada() {
+        System.out.println("\n**************************************************");
+        System.out.println("FIM: O FORAGIDO");
+        System.out.println("Você foge com o Elmo! Viaja para terras ao sul, mas a notícia da traição se espalha.");
+
+        System.out.println("Após alguns meses, o Exército Real o encontra. Não há como fugir desta vez!");
+
+        Inimigo comandante = new Inimigo("Comandante das Tropas Reais", 400, 70, 40, 0); // HP altíssimo
+
+        System.out.println("\n!!! ÚLTIMA BATALHA !!! Você é cercado pelo " + comandante.getNome() + " e sua guarda!");
+        encontroInimigo(comandante);
+
+        if (heroi.estaVivo()) {
+            System.out.println("\nVocê derrota o Comandante, mas as tropas restantes o superam. Você cai, e o Elmo é perdido.");
+        } else {
+            System.out.println("\nVocê morre sob o peso da traição.");
+        }
+    }
+
+    private void encerrarJogo() {
+        System.out.println("\n--------------------------------------------------");
+        System.out.println("O JOGO TERMINOU.");
+        System.exit(0);
+    }
 
 }
